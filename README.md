@@ -45,8 +45,35 @@ If you can't access the NodePort service webapp with `MinikubeIP:NodePort`, exec
 
 <br />
 
+#### Expose the service with Ingress 
+
+```shell
+# enable ingress controller for minkube
+minikube addons enable ingress
+kubectl get pods -n ingress-nginx
+kubectl get svc -n ingress-nginx
+
+
+# apply the ingress 
+kubectl apply -f ./webapp-ingress.yaml
+
+kubectl get ingress webapp-ingress
+
+# let Kubernetes ingress controller watch on 80 port
+sudo minikube tunnel
+
+# manually resolve the domain to 127.0.0.1
+curl --resolve "webapp.example.com:80:127.0.0.1" -i http://webapp.example.com
+
+# you can also persist the dns resovle record into /etc/hosts
+127.0.0.1 webapp.example.com   
+127.0.0.1 hello-world.example
+
+```
+
 #### Links
 * mongodb image on Docker Hub: https://hub.docker.com/_/mongo
 * webapp image on Docker Hub: https://hub.docker.com/repository/docker/nanajanashia/k8s-demo-app
 * k8s official documentation: https://kubernetes.io/docs/home/
 * webapp code repo: https://gitlab.com/nanuchi/developing-with-docker/-/tree/feature/k8s-in-hour
+* ingress on minikube https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
