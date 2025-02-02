@@ -1,5 +1,5 @@
 ### Repository for the K8s in 1 hour video
-
+[Repository for the K8s in 1 hour video](https://www.youtube.com/watch?v=s_o8dwzRlu4)
 #### K8s manifest files 
 * mongo-config.yaml
 * mongo-secret.yaml
@@ -69,6 +69,37 @@ curl --resolve "webapp.example.com:80:127.0.0.1" -i http://webapp.example.com
 127.0.0.1 webapp.example.com   
 127.0.0.1 hello-world.example
 
+```
+
+```shell
+kubectl create secret tls webapp-tls --cert=path/to/tls.crt --key=path/to/tls.key
+
+```
+
+### Reverse engineering 
+
+#### Export a Pod to YAML
+
+```shell
+kubectl get pods
+
+kubectl get pod <pod-name> -o yaml > pod.yaml
+```
+
+#### Export a Service to YAML
+
+```shell
+kubectl get services
+
+kubectl get service <service-name> -o yaml > service.yaml
+```
+
+#### Export a Deployment to YAML
+
+```shell
+kubectl get deployments
+
+kubectl get deployment <deployment-name> -o yaml > deployment.yaml
 ```
 
 #### Links
