@@ -71,10 +71,43 @@ curl --resolve "webapp.example.com:80:127.0.0.1" -i http://webapp.example.com
 
 ```
 
-```shell
-kubectl create secret tls webapp-tls --cert=path/to/tls.crt --key=path/to/tls.key
+#### Enable TLS
 
+```shell
+# Step 1: Generate a Private Key
+openssl genpkey -algorithm RSA -out example.com.key
+
+# Step 2: Generate a Certificate Signing Request (CSR)
+openssl req -new -key example.com.key -out example.com.csr
+# For the Common Name (CN), enter *.example.com.
+
+# Step 3: Generate a Self-Signed Certificate
+openssl x509 -req -days 365 -in example.com.csr -signkey example.com.key -out example.com.crt
+
+# Step 4: Verify the Certificate
+openssl x509 -in example.com.crt -text -noout
+
+# Step 5: Create a Kubernetes TLS Secret
+kubectl create secret tls example-com-tls --cert=example.com.crt --key=example.com.key
+
+# Step 6: Verify the Secret
+kubectl get secret example-com-tls
+kubectl describe secret example-com-tls
+
+# Step 7: Use the Secret in an Ingress Resource
+# Update your Ingress resource to use the TLS secret:
+
+
+# Step 8: Test the TLS Configuration
+curl -v --insecure https://webapp.example.com
 ```
+
+###### Add Subject Alternative Names via config file(openssl.cnf)
+```shell
+openssl req -new -key example.com.key -out example.com.csr -config openssl.cnf
+openssl x509 -req -days 365 -in example.com.csr -signkey example.com.key -out example.com.crt -extensions v3_req -extfile openssl.cnf
+```
+
 
 ### Reverse engineering 
 
